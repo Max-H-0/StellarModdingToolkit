@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\cross-small" />
+    <None Remove="Assets\panel-settings" />
+    <None Remove="Assets\resize-cursors" />
+    <None Remove="Assets\style-sheets" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\cross-small" />
+    <EmbeddedResource Include="Assets\panel-settings" />
+    <EmbeddedResource Include="Assets\resize-cursors" />
+    <EmbeddedResource Include="Assets\style-sheets" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ReferencedAssemblies\MelonLoader.dll" />
+    <Reference Include="ReferencedAssemblies\UnityEngine.dll" />
+    <Reference Include="ReferencedAssemblies\UnityEngine.CoreModule.dll" />
+    <Reference Include="ReferencedAssemblies\UnityEngine.UIElementsModule.dll" />
+    <Reference Include="ReferencedAssemblies\UnityEngine.AssetBundleModule.dll" />
+    <Reference Include="ReferencedAssemblies\Unity.InputSystem.dll" />
+    <Reference Include="ReferencedAssemblies\Core.dll" />
+    <Reference Include="ReferencedAssemblies\UI.dll" />
+    <Reference Include="ReferencedAssemblies\UI.Interface.dll" />
+    <Reference Include="ReferencedAssemblies\Player.dll" />
+    <Reference Include="ReferencedAssemblies\Player.Interface.dll" />
+  </ItemGroup>
+  
+</Project>
