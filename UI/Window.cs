@@ -71,7 +71,7 @@ internal class Window : ResizeableElement
         Button closeButton = new(closeButtonAction) { name = "smtk-close-button" };
         closeButton.AddToClassList("smtk-window__close-button");
 
-        var key = StellarModdingToolkitPlugin.CrossSmallKey;
+        var key = StellarModdingToolkitPlugin.Keys.CrossSmall;
         var image = StellarModdingToolkitPlugin.AssetLoader?.GetAsset<Sprite>(key);
         closeButton.style.backgroundImage = image?.texture;
         
@@ -94,10 +94,10 @@ internal class Window : ResizeableElement
 
     private void SetCursor(ResizeMode resizeMode)
     {
-        string horizontalKey   = StellarModdingToolkitPlugin.ResizeHorizontalCursorKey;
-        string verticalKey     = StellarModdingToolkitPlugin.ResizeVerticalCursorKey;
-        string diagonalUpKey   = StellarModdingToolkitPlugin.ResizeDiagonalUpCursorKey;
-        string diagonalDownKey = StellarModdingToolkitPlugin.ResizeDiagonalDownCursorKey;
+        string horizontalKey   = StellarModdingToolkitPlugin.Keys.ResizeHorizontalCursor;
+        string verticalKey     = StellarModdingToolkitPlugin.Keys.ResizeVerticalCursor;
+        string diagonalUpKey   = StellarModdingToolkitPlugin.Keys.ResizeDiagonalUpCursor;
+        string diagonalDownKey = StellarModdingToolkitPlugin.Keys.ResizeDiagonalDownCursor;
         
         Texture2D? horizontal   = StellarModdingToolkitPlugin.AssetLoader?.GetAsset<Texture2D>(horizontalKey);
         Texture2D? vertical     = StellarModdingToolkitPlugin.AssetLoader?.GetAsset<Texture2D>(verticalKey);
