@@ -55,7 +55,7 @@ public class ExampleHubWindow : HubWindow
 }
 ```
 If you tried the mod in this state you'd see... nothing? <br/>
-That's because we havent actually added a window (ore more) to the `Hub` yet. <br/>
+That's because we haven't actually added a window (ore more) to the `Hub` yet. <br/>
 <br/>
 You could do that at any point in time but since we always want access to our window we'll create it right at the start of the game. <br/>
 The best place to this is in 'OnInitializeMelon', when the Hub hasn't even been created yet. <br/>
