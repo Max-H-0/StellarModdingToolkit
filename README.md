@@ -49,10 +49,11 @@ public class ExampleHubWindow : HubWindow
 }
 ```
 If you tried the mod in this state you'd see... nothing? <br/>
-That's because we havent actually added one (ore more) to the Hub yet. <br/>
+That's because we havent actually added a window (ore more) to the Hub yet. <br/>
 <br/>
 You could do that at any point in time but since we always want access to our window we'll create it right at the start of the game. <br/>
 The best place to this is in 'OnInitializeMelon', when the Hub hasn't even been created yet. <br/>
+Only use `OnCreatedHub` when calling `AddHubWindow` this early, if you use it after its creation your window won't be added.
 
 ```cs
 public class HubExampleMod : MelonMod
@@ -66,10 +67,19 @@ public class HubExampleMod : MelonMod
     }
 }
 ```
+After starting the game and opening the hub (F12 by default) you'll now see your very own window. 🎉 <br/>
+![image](https://github.com/user-attachments/assets/d644f66c-c4b1-4199-9888-eb2f679b84ad) <br/>
+
+
+## ⚙️ Changing the Hub Keybind
+
+You can switch to another Keybind by editing `ToggleHubInputBinding` in `\StellarDrive\UserData\MelonPreferences.cfg`. <br/>
+The default value is `"<Keyboard>/f12"`. <br/> 
+<br/>
+If you wanted to use F11 instead of F12 you'd simply have to replace the default with `"<Keyboard>/f11"`.
+
+
 
 ## ❓ Help
 
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
+If you have any issues or questions, feel free to reach out to me on the <a href="https://discord.gg/6KAvq3S9ZW">Discord server</a>!
