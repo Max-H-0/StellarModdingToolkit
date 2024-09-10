@@ -2,6 +2,12 @@
 
 Provides various utilities for the creation of StellarDrive mods with MelonLoader.
 
+## 🗒️ Description
+
+SMTK offers utilities for StellarDriv MelonLoadere mods, including:
+- UITK support, including custom runtime theme and panel settings bundle
+- The Hub, an overlay menu mods can use to display custom resizable windows with ease
+- AssetBundleLoader, it loads asset bundles...
 
 ## 🚀 Getting Started
 
