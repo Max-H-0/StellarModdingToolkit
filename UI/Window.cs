@@ -71,8 +71,8 @@ internal class Window : ResizeableElement
         Button closeButton = new(closeButtonAction) { name = "smtk-close-button" };
         closeButton.AddToClassList("smtk-window__close-button");
 
-        var key = StellarModdingToolkitPlugin.Keys.CrossSmall;
-        var image = StellarModdingToolkitPlugin.AssetLoader?.GetAsset<Sprite>(key);
+        var key = SMTK.Keys.CrossSmall;
+        var image = SMTK.AssetLoader?.GetAsset<Sprite>(key);
         closeButton.style.backgroundImage = image?.texture;
         
         titlebar.Add(title);
@@ -94,15 +94,15 @@ internal class Window : ResizeableElement
 
     private void SetCursor(ResizeMode resizeMode)
     {
-        string horizontalKey   = StellarModdingToolkitPlugin.Keys.ResizeHorizontalCursor;
-        string verticalKey     = StellarModdingToolkitPlugin.Keys.ResizeVerticalCursor;
-        string diagonalUpKey   = StellarModdingToolkitPlugin.Keys.ResizeDiagonalUpCursor;
-        string diagonalDownKey = StellarModdingToolkitPlugin.Keys.ResizeDiagonalDownCursor;
+        string horizontalKey   = SMTK.Keys.ResizeHorizontalCursor;
+        string verticalKey     = SMTK.Keys.ResizeVerticalCursor;
+        string diagonalUpKey   = SMTK.Keys.ResizeDiagonalUpCursor;
+        string diagonalDownKey = SMTK.Keys.ResizeDiagonalDownCursor;
         
-        Texture2D? horizontal   = StellarModdingToolkitPlugin.AssetLoader?.GetAsset<Texture2D>(horizontalKey);
-        Texture2D? vertical     = StellarModdingToolkitPlugin.AssetLoader?.GetAsset<Texture2D>(verticalKey);
-        Texture2D? diagonalUp   = StellarModdingToolkitPlugin.AssetLoader?.GetAsset<Texture2D>(diagonalUpKey);
-        Texture2D? diagonalDown = StellarModdingToolkitPlugin.AssetLoader?.GetAsset<Texture2D>(diagonalDownKey);
+        Texture2D? horizontal   = SMTK.AssetLoader?.GetAsset<Texture2D>(horizontalKey);
+        Texture2D? vertical     = SMTK.AssetLoader?.GetAsset<Texture2D>(verticalKey);
+        Texture2D? diagonalUp   = SMTK.AssetLoader?.GetAsset<Texture2D>(diagonalUpKey);
+        Texture2D? diagonalDown = SMTK.AssetLoader?.GetAsset<Texture2D>(diagonalDownKey);
 
         if (resizeMode is ResizeMode.None or ResizeMode.Move)
         {

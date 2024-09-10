@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 
-namespace StellarModdingToolkit.UI.StellarHub;
+namespace StellarModdingToolkit.UI.Hub;
 
-internal class StellarHubToolbar : VisualElement
+internal class HubToolbar : VisualElement
 {
-    public StellarHubToolbar()
+    public HubToolbar()
     {
         AddToClassList("smtk-hub-toolbar");
     }
 
-    private Dictionary<StellarHubWindow, Window> _items = [];
-    public Dictionary<StellarHubWindow, Window> Items 
+    private Dictionary<HubWindow, Window> _items = [];
+    public Dictionary<HubWindow, Window> Items 
     { 
         get => _items; 
         set 
@@ -34,7 +34,7 @@ internal class StellarHubToolbar : VisualElement
     }
     
     
-    private VisualElement CreateListElement(StellarHubWindow window)
+    private VisualElement CreateListElement(HubWindow window)
     {
         Button button = new()
         {

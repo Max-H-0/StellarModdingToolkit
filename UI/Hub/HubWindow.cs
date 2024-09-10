@@ -2,12 +2,12 @@ using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace StellarModdingToolkit.UI.StellarHub;
+namespace StellarModdingToolkit.UI.Hub;
 
 /// <summary>
-/// Base for Windows the StellarHub can display
+/// Base for Windows the Hub can display
 /// </summary>
-public abstract class StellarHubWindow
+public abstract class HubWindow
 {
     private bool _isVisible = true;
     

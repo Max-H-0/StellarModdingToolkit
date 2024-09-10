@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Reference Include="ReferencedAssemblies\MelonLoader.dll" />
-    <Reference Include="ReferencedAssemblies\UnityEngine.dll" />
     <Reference Include="ReferencedAssemblies\UnityEngine.CoreModule.dll" />
     <Reference Include="ReferencedAssemblies\UnityEngine.UIElementsModule.dll" />
     <Reference Include="ReferencedAssemblies\UnityEngine.AssetBundleModule.dll" />
@@ -32,6 +31,7 @@
     <Reference Include="ReferencedAssemblies\UI.Interface.dll" />
     <Reference Include="ReferencedAssemblies\Player.dll" />
     <Reference Include="ReferencedAssemblies\Player.Interface.dll" />
+    <Reference Include="ReferencedAssemblies\Managers.Interface.dll" />
   </ItemGroup>
   
 </Project>

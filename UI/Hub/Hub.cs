@@ -1,4 +1,5 @@
 using MelonLoader;
+using Player.Interface.Model;
 using StellarModdingToolkit.StellarDriveIntegration;
 using System;
 using System.Collections.Generic;
@@ -10,69 +11,76 @@ using UnityEngine.UIElements;
 
 using Object = UnityEngine.Object;
 
-namespace StellarModdingToolkit.UI.StellarHub;
+namespace StellarModdingToolkit.UI.Hub;
 
-public class StellarHub 
+/// <summary>
+/// Used to show easily display custom windows
+/// </summary>
+public class Hub 
 {
     private GameObject? _uiGameObject;
     private VisualElement _container;
-    private StellarHubToolbar _toolbar;
+    private HubToolbar _toolbar;
     
-    private readonly Dictionary<StellarHubWindow, Window> _windows = [];
+    private readonly Dictionary<HubWindow, Window> _windows = [];
 
     private bool _isVisible = false;
+    private PlayerBehaviourFlags _savedBehaviours;
+
     
-    
-    internal StellarHub(PanelSettings panelSettings)
+    internal Hub(PanelSettings panelSettings)
     {
         InitializePanelSettings(panelSettings);
         CreateDocument();
-        
+
         _container = CreateContainer();
         _toolbar = CreateToolbar();
 
 
-        var binding = Melon<StellarModdingToolkitPlugin>.Instance.ToggleHubInputBinding?.Value;
-        InputAction input = new(binding: binding);
+        var toggleBinding = Melon<SMTK>.Instance.ToggleHubInputBinding?.Value;
+        InputAction toggleInput = new(binding: toggleBinding);
+        toggleInput.performed += _ => TryToggle();
+        toggleInput.Enable();
 
-        input.performed += _ => ToggleVisibility();
-        input.Enable();
+        InputAction closeInput = new(binding: "<Keyboard>/escape");
+        closeInput.performed += _ => IsVisible = false;
+        closeInput.Enable();
 
         IsVisible = false;
     }
 
 
     /// <summary>
-    /// The StellarHub's PanelSettings
+    /// The Hub's PanelSettings
     /// (UITK needs this)
     /// </summary>
     public static PanelSettings? PanelSettings { get; private set; }
 
     /// <summary>
-    /// The StellarHub's UIDocument
+    /// The Hub's UIDocument
     /// (Contains the UI)
     /// </summary>
     public static UIDocument? UIDocument { get; private set; }
 
 
     /// <summary>
-    /// Every Window in the StellarHub as StellarHubWindow
+    /// Every Window in the Hub as HubWindow
     /// </summary>
-    public ReadOnlyCollection<StellarHubWindow> Windows => new(_windows.Keys?.ToArray());
+    public ReadOnlyCollection<HubWindow> Windows => new(_windows.Keys?.ToArray());
 
 
     /// <summary>
-    /// Called once a StellarHubWindow has been added
+    /// Called once a HubWindow has been added
     /// </summary>
-    public EventHandler<StellarHubWindow>? OnAddedHubWindow { get; private set; }
+    public EventHandler<HubWindow>? OnAddedHubWindow { get; private set; }
 
     /// <summary>
-    /// Called once a StellarHubWindow has been removed
+    /// Called once a HubWindow has been removed
     /// </summary>
-    public EventHandler<StellarHubWindow>? OnRemovedHubWindow { get; private set; }
+    public EventHandler<HubWindow>? OnRemovedHubWindow { get; private set; }
 
     /// <summary>
-    /// Indicates wheter the StellarHub is visible/displayed
+    /// Indicates wheter the Hub is visible/displayed
     /// </summary>
     public bool IsVisible
     {
@@ -87,31 +95,34 @@ public class StellarHub
 
             if (_isVisible)
             {
-                IntegrationUtilities.SetBehaviourStates(PlayerBehaviourFlags.All, false);
-                IntegrationUtilities.SetBehaviourStates(PlayerBehaviourFlags.Input | PlayerBehaviourFlags.EscapeControl, true);
+                _savedBehaviours = IntegrationUtilities.GetCurrentBehaviourStates();
+                IntegrationUtilities.SetBehaviourStates(PlayerBehaviourFlags.Input | PlayerBehaviourFlags.EscapeControl);
+
                 var imposter = IntegrationUtilities.CreateMenuImposter<ClosableMenuImposter>(this);
 
                 if (imposter is not null) imposter.OnClose += (_, _)  => IsVisible = false;
             }
             else
             {
-                IntegrationUtilities.SetBehaviourStates(PlayerBehaviourFlags.All, true);
+                IntegrationUtilities.SetBehaviourStates(_savedBehaviours);
                 IntegrationUtilities.DestroyAllMenuImposters(this);
             }
         }
     } 
 
 
-    public void ToggleVisibility()
+    public void TryToggle()
     {
+        if (IntegrationUtilities.GetCurrentPlayerStateType() is PlayerStateType.WritingBeaconName) return;
+
         IsVisible = !IsVisible;
     }
 
 
     /// <summary>
-    /// Adds/Creates a new Window for the StellarHub
+    /// Adds/Creates a new Window for the Hub
     /// </summary>
-    public void AddHubWindow(StellarHubWindow hubWindow)
+    public void AddHubWindow(HubWindow hubWindow)
     {
         const int resizeHandleWidth = 15;
         
@@ -163,9 +174,9 @@ public class StellarHub
     }
 
     /// <summary>
-    /// Removes the corresponding Window from the StellarHub
+    /// Removes the corresponding Window from the HubWindow
     /// </summary>
-    public void RemoveHubWindow(StellarHubWindow hubWindow)
+    public void RemoveHubWindow(HubWindow hubWindow)
     {
         Window window = _windows[hubWindow];
         
@@ -179,8 +190,8 @@ public class StellarHub
     private void InitializePanelSettings(PanelSettings panelSettings)
     {
         //TODO: Apply changes
-        
         PanelSettings = panelSettings;
+        PanelSettings.sortingOrder = 100;
     }
     
 
@@ -194,24 +205,24 @@ public class StellarHub
 
         var styleSheetAssetKeys = new[]
         {
-            StellarModdingToolkitPlugin.Keys.MiscellaneousStyleSheet,
-            StellarModdingToolkitPlugin.Keys.TextInputFieldsStyleSheet,
-            StellarModdingToolkitPlugin.Keys.CompositeFieldsStyleSheet,
-            StellarModdingToolkitPlugin.Keys.ButtonsStyleSheet,
-            StellarModdingToolkitPlugin.Keys.TogglesStyleSheet,
-            StellarModdingToolkitPlugin.Keys.SlidersStyleSheet,
-            StellarModdingToolkitPlugin.Keys.EnumsStyleSheet,
-            StellarModdingToolkitPlugin.Keys.DropdownsStyleSheet,
-            StellarModdingToolkitPlugin.Keys.ProgressBarsStyleSheet,
-            StellarModdingToolkitPlugin.Keys.BoundsFieldsStyleSheet,
-            StellarModdingToolkitPlugin.Keys.WindowsStyleSheet,
-            StellarModdingToolkitPlugin.Keys.ScrollersStyleSheet,
-            StellarModdingToolkitPlugin.Keys.StellarHubToolbarStyleSheet
+            SMTK.Keys.MiscellaneousStyleSheet,
+            SMTK.Keys.TextInputFieldsStyleSheet,
+            SMTK.Keys.CompositeFieldsStyleSheet,
+            SMTK.Keys.ButtonsStyleSheet,
+            SMTK.Keys.TogglesStyleSheet,
+            SMTK.Keys.SlidersStyleSheet,
+            SMTK.Keys.EnumsStyleSheet,
+            SMTK.Keys.DropdownsStyleSheet,
+            SMTK.Keys.ProgressBarsStyleSheet,
+            SMTK.Keys.BoundsFieldsStyleSheet,
+            SMTK.Keys.WindowsStyleSheet,
+            SMTK.Keys.ScrollersStyleSheet,
+            SMTK.Keys.HubToolbarStyleSheet
         };
 
         foreach (var key in styleSheetAssetKeys)
         {
-            StyleSheet? styleSheet = StellarModdingToolkitPlugin.AssetLoader?.GetAsset<StyleSheet>(key);
+            StyleSheet? styleSheet = SMTK.AssetLoader?.GetAsset<StyleSheet>(key);
             
             UIDocument.rootVisualElement.styleSheets.Add(styleSheet);
         }
@@ -236,7 +247,7 @@ public class StellarHub
         return container;
     }
 
-    private StellarHubToolbar CreateToolbar()
+    private HubToolbar CreateToolbar()
     {
         VisualElement absoluteContainer = new()
         {
@@ -249,7 +260,7 @@ public class StellarHub
             }, 
             pickingMode = PickingMode.Ignore
         };
-        StellarHubToolbar toolbar = new();
+        HubToolbar toolbar = new();
 
         OnAddedHubWindow += (s, e) =>
         {

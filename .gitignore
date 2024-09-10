@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Third-Party (idk how licenses work so ig I'll just remove these and add instruction on how to add them')
+*.dll
+
 # User-specific files
 *.rsuser
 *.suo

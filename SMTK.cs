@@ -2,15 +2,16 @@
 using UnityEngine.UIElements;
 using MelonLoader;
 using StellarModdingToolkit.Assets;
-using StellarModdingToolkit.UI.StellarHub;
+using StellarModdingToolkit.UI.Hub;
+using StellarModdingToolkit.StellarDriveIntegration;
 
 namespace StellarModdingToolkit;
 
 /// <summary>
-/// Responsible for StellarHub creation
+/// Responsible for Hub creation
 /// (also provides some base Assets)
 /// </summary>
-public class StellarModdingToolkitPlugin : MelonPlugin
+public class SMTK : MelonPlugin
 {
     /// <summary>
     /// Provides some base Assets
@@ -21,7 +22,7 @@ public class StellarModdingToolkitPlugin : MelonPlugin
     /// <summary>
     /// Manages UI Windows
     /// </summary>
-    public static StellarHub? StellarHub { get; private set; }
+    public static Hub? Hub { get; private set; }
 
 
     /// <summary>
@@ -30,9 +31,9 @@ public class StellarModdingToolkitPlugin : MelonPlugin
     public static EventHandler? OnCreatedAssetLoader;
 
     /// <summary>
-    /// Called once the StellarHub has been created
+    /// Called once the Hub has been created
     /// </summary>
-    public static EventHandler? OnCreatedStellarHub;
+    public static EventHandler? OnCreatedHub;
 
 
     /// <summary>
@@ -41,7 +42,7 @@ public class StellarModdingToolkitPlugin : MelonPlugin
     public MelonPreferences_Category? PreferenceCategory { get; set; }
 
     /// <summary>
-    /// InputBinding that's used to toggle the StellarHub
+    /// InputBinding that's used to toggle the Hub
     /// </summary>
     public MelonPreferences_Entry<string>? ToggleHubInputBinding { get; set; }
 
@@ -73,7 +74,7 @@ public class StellarModdingToolkitPlugin : MelonPlugin
         public const string BoundsFieldsStyleSheet = "bounds-fields-style-sheet";
         public const string WindowsStyleSheet = "windows-style-sheet";
         public const string ScrollersStyleSheet = "scrollers-style-sheet";
-        public const string StellarHubToolbarStyleSheet = "stellar-hub-toolbar-style-sheet";
+        public const string HubToolbarStyleSheet = "stellar-hub-toolbar-style-sheet";
     }
 
 
@@ -113,7 +114,7 @@ public class StellarModdingToolkitPlugin : MelonPlugin
             Keys.BoundsFieldsStyleSheet,
             Keys.WindowsStyleSheet,
             Keys.ScrollersStyleSheet,
-            Keys.StellarHubToolbarStyleSheet
+            Keys.HubToolbarStyleSheet
         ]);
         OnCreatedAssetLoader?.Invoke(this, EventArgs.Empty);
 
@@ -129,7 +130,7 @@ public class StellarModdingToolkitPlugin : MelonPlugin
         }
 
 
-        StellarHub = new StellarHub(panelSettings);
-        OnCreatedStellarHub?.Invoke(this, EventArgs.Empty);
+        Hub = new Hub(panelSettings);
+        OnCreatedHub?.Invoke(this, EventArgs.Empty);
     }
 }
