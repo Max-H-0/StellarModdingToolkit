@@ -26,7 +26,7 @@ Those are most likely not the only dlls you'll use but they're the only required
 
 ### Hub example
 
-The Hub is an overlay mods can use to easily display custom ✨resizable✨ windows.
+The `Hub` is an overlay mods can use to easily display custom ✨resizable✨ windows.
 <br/>
 So lets create a new one!
 ```cs
@@ -55,7 +55,7 @@ public class ExampleHubWindow : HubWindow
 }
 ```
 If you tried the mod in this state you'd see... nothing? <br/>
-That's because we havent actually added a window (ore more) to the Hub yet. <br/>
+That's because we havent actually added a window (ore more) to the `Hub` yet. <br/>
 <br/>
 You could do that at any point in time but since we always want access to our window we'll create it right at the start of the game. <br/>
 The best place to this is in 'OnInitializeMelon', when the Hub hasn't even been created yet. <br/>
@@ -75,6 +75,8 @@ public class HubExampleMod : MelonMod
 ```
 After starting the game and opening the hub (F12 by default) you'll now see your very own window. 🎉 <br/>
 ![image](https://github.com/user-attachments/assets/d644f66c-c4b1-4199-9888-eb2f679b84ad) <br/>
+Not happy with how a window looks? :( <br/>
+Then use the `AssetLoader` to import some custom style sheets!
 
 
 ## ⚙️ Changing the Hub Keybind
