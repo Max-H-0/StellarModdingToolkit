@@ -14,6 +14,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 using Object = UnityEngine.Object;
+using Ship.Interface.Settings;
+using System.Linq;
+using UI.BuildMenu;
+using Ship.Interface.Services;
 
 namespace StellarModdingToolkit.StellarDriveIntegration;
 
@@ -23,6 +27,32 @@ namespace StellarModdingToolkit.StellarDriveIntegration;
 public static class IntegrationUtilities
 {
     private static Dictionary<object, List<MenuImposter>> _imposters = [];
+
+
+    /// <summary>
+    /// Adds a custom part to the game's menus
+    /// Method should be called after loading the main scene
+    /// </summary>
+    public static void AddPart(PartSettings part)
+    {
+        BuildMenu buildMenu = Object.FindFirstObjectByType<BuildMenu>();
+        BuildPanel partsPanel = buildMenu.GetComponentsInChildren<BuildPanel>().FirstOrDefault(p => p.gameObject.name == "PartsPanel");
+
+        FieldInfo rowsField = partsPanel.GetType().GetField("_rows", BindingFlags.NonPublic | BindingFlags.Instance);
+        BuildRow[] originalRows = (BuildRow[])rowsField.GetValue(partsPanel);
+
+        BuildRow row = originalRows.FirstOrDefault();
+        row.parts.Add(part);
+    }
+
+    // <summary>
+    /// Checks if a Part with the ID already exists
+    /// </summary>
+    public static bool IsPartIDTaken(ushort id)
+    {
+        return Resources.FindObjectsOfTypeAll<PartSettings>().Any(p => p.id == id);
+    }
+
 
     /// <summary>
     /// Stops interactions
@@ -38,6 +68,38 @@ public static class IntegrationUtilities
     public static void CloseAllOpenMenus()
     {
         ServiceLocator.GetService<IClosableMenuService>()?.CloseAllOpenMenus();
+    }
+
+
+    /// <summary>
+    /// Gets SD's default State-Behaviour mapping
+    /// </summary>
+    public static Dictionary<PlayerStateType, List<MonoBehaviour>> GetSDBehaviourScriptMap()
+    {
+        var behaviourActivator = Object.FindObjectOfType<PlayerBehaviourActivator>();
+        var map = (Dictionary<PlayerStateType, List<MonoBehaviour>>)typeof(PlayerBehaviourActivator).GetField("_enabledScriptsMap", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(behaviourActivator);
+
+        return map;
+    }
+
+    public static void EnableMovement()
+    {
+        if (GetCurrentPlayerStateType() is not PlayerStateType type) return;
+
+        foreach (var behaviour in GetSDBehaviourScriptMap()[type])
+        {
+            behaviour.enabled = true;
+        }
+    }
+
+    public static void DisableMovement()
+    {
+        if (GetCurrentPlayerStateType() is not PlayerStateType type) return;
+
+        foreach (var behaviour in GetSDBehaviourScriptMap()[type])
+        {
+            behaviour.enabled = false;
+        }
     }
 
 

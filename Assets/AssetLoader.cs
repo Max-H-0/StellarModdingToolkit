@@ -88,6 +88,7 @@ public class AssetLoader
         }
     }
     
+    /*
     private void LoadAndSetAssets()
     {
         var resourceNames = _assembly.GetManifestResourceNames();
@@ -102,7 +103,43 @@ public class AssetLoader
             SetMatchingAssets(assets);
         }
     }
-    
+    */
+
+    private void LoadAndSetAssets()
+    {
+        var resourceNames = _assembly.GetManifestResourceNames();
+        _logger?.Msg("Loading resources...");
+
+        foreach (var name in resourceNames)
+        {
+            _logger?.Msg($"Processing resource: {name}");
+
+            Stream stream = _assembly.GetManifestResourceStream(name);
+            if (stream == null)
+            {
+                _logger?.Error($"Resource stream is null for: {name}");
+                continue;
+            }
+
+            try
+            {
+                AssetBundle assetBundle = AssetBundle.LoadFromStream(stream);
+                if (assetBundle == null)
+                {
+                    _logger?.Error($"AssetBundle could not be loaded from: {name}");
+                    continue;
+                }
+
+                Object[] assets = assetBundle.LoadAllAssets();
+                SetMatchingAssets(assets);
+            }
+            catch (Exception e)
+            {
+                _logger?.Error($"Error loading AssetBundle from resource: {name}. Exception: {e}");
+            }
+        }
+    }
+
     private void SetMatchingAssets(Object[] assets)
     {
         foreach (var asset in assets)

@@ -31,6 +31,9 @@
     <Reference Include="ReferencedAssemblies\UI.Interface.dll" />
     <Reference Include="ReferencedAssemblies\Player.dll" />
     <Reference Include="ReferencedAssemblies\Player.Interface.dll" />
+    <Reference Include="ReferencedAssemblies\Ship.dll" />
+    <Reference Include="ReferencedAssemblies\Ship.Interface.dll" />
+    <Reference Include="ReferencedAssemblies\Items.Interface.dll" />
     <Reference Include="ReferencedAssemblies\Managers.Interface.dll" />
   </ItemGroup>
   

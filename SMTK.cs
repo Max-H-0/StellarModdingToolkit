@@ -3,7 +3,6 @@ using UnityEngine.UIElements;
 using MelonLoader;
 using StellarModdingToolkit.Assets;
 using StellarModdingToolkit.UI.Hub;
-using StellarModdingToolkit.StellarDriveIntegration;
 
 namespace StellarModdingToolkit;
 
@@ -51,30 +50,44 @@ public class SMTK : MelonPlugin
     /// Contains the names of the base Assets
     /// (required to load/access them with the AssetLoader)
     /// </summary>
+    [AssetKeyCollection]
     public struct Keys
     {
+        [AssetKey] 
         public const string PanelSettings = "panel-settings";
 
+
+        [AssetKey] 
         public const string CrossSmall = "cross-small";
 
-        public const string ResizeHorizontalCursor = "resize-horizontal-cursor";
-        public const string ResizeVerticalCursor = "resize-vertical-cursor";
-        public const string ResizeDiagonalUpCursor = "resize-diagonal-up-cursor";
-        public const string ResizeDiagonalDownCursor = "resize-diagonal-down-cursor";
 
-        public const string MiscellaneousStyleSheet = "miscellaneous-style-sheet";
-        public const string TextInputFieldsStyleSheet = "text-input-fields-style-sheet";
-        public const string CompositeFieldsStyleSheet = "composite-fields-style-sheet";
-        public const string ButtonsStyleSheet = "buttons-style-sheet";
-        public const string TogglesStyleSheet = "toggles-style-sheet";
-        public const string SlidersStyleSheet = "sliders-style-sheet";
-        public const string EnumsStyleSheet = "enums-style-sheet";
-        public const string DropdownsStyleSheet = "dropdowns-style-sheet";
-        public const string ProgressBarsStyleSheet = "progress-bars-style-sheet";
-        public const string BoundsFieldsStyleSheet = "bounds-fields-style-sheet";
-        public const string WindowsStyleSheet = "windows-style-sheet";
-        public const string ScrollersStyleSheet = "scrollers-style-sheet";
-        public const string HubToolbarStyleSheet = "stellar-hub-toolbar-style-sheet";
+        [AssetKeyCollection]
+        public struct ResizeCursors
+        {
+            public const string Horizontal = "resize-horizontal-cursor";
+            public const string Vertical = "resize-vertical-cursor";
+            public const string DiagonalUp = "resize-diagonal-up-cursor";
+            public const string DiagonalDown = "resize-diagonal-down-cursor";
+        }
+
+
+        [AssetKeyCollection]
+        public struct StyleSheets
+        {
+            public const string Miscellaneous = "miscellaneous-style-sheet";
+            public const string TextInputFields = "text-input-fields-style-sheet";
+            public const string CompositeFields = "composite-fields-style-sheet";
+            public const string Buttons = "buttons-style-sheet";
+            public const string Toggles = "toggles-style-sheet";
+            public const string Sliders = "sliders-style-sheet";
+            public const string Enums = "enums-style-sheet";
+            public const string Dropdowns = "dropdowns-style-sheet";
+            public const string ProgressBars = "progress-bars-style-sheet";
+            public const string BoundsFields = "bounds-fields-style-sheet";
+            public const string Windows = "windows-style-sheet";
+            public const string Scrollers = "scrollers-style-sheet";
+            public const string HubToolbar = "stellar-hub-toolbar-style-sheet";
+        }
     }
 
 
@@ -91,44 +104,12 @@ public class SMTK : MelonPlugin
     {
         base.OnLateInitializeMelon();
 
-        AssetLoader = new(MelonAssembly.Assembly, LoggerInstance,
-        [
-            Keys.PanelSettings,
-
-            Keys.CrossSmall,
-
-            Keys.ResizeHorizontalCursor,
-            Keys.ResizeVerticalCursor,
-            Keys.ResizeDiagonalUpCursor,
-            Keys.ResizeDiagonalDownCursor,
-
-            Keys.MiscellaneousStyleSheet,
-            Keys.TextInputFieldsStyleSheet,
-            Keys.CompositeFieldsStyleSheet,
-            Keys.ButtonsStyleSheet,
-            Keys.TogglesStyleSheet,
-            Keys.SlidersStyleSheet,
-            Keys.EnumsStyleSheet,
-            Keys.DropdownsStyleSheet,
-            Keys.ProgressBarsStyleSheet,
-            Keys.BoundsFieldsStyleSheet,
-            Keys.WindowsStyleSheet,
-            Keys.ScrollersStyleSheet,
-            Keys.HubToolbarStyleSheet
-        ]);
+        AssetLoader = new(MelonAssembly.Assembly, LoggerInstance, AssetUtilities.ExtractAssetKeysFrom(typeof(Keys)));
         OnCreatedAssetLoader?.Invoke(this, EventArgs.Empty);
 
 
-        var panelSettings = AssetLoader.GetAsset<PanelSettings>(Keys.PanelSettings);
-
-
-        if (panelSettings is null)
-        {
-            LoggerInstance.Error("Failed loading PanelSettings!");
-
-            throw new ArgumentNullException(nameof(panelSettings));
-        }
-
+        var panelSettings = AssetLoader.GetAsset<PanelSettings>(Keys.PanelSettings)
+                                       .Expect("Failed loading PanelSettings!");
 
         Hub = new Hub(panelSettings);
         OnCreatedHub?.Invoke(this, EventArgs.Empty);

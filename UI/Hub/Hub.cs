@@ -87,24 +87,30 @@ public class Hub
         get => _isVisible;
         set
         {
-            _isVisible = value;
-
-            var displayStyle = _isVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            var displayStyle = value ? DisplayStyle.Flex : DisplayStyle.None;
             _container.style.display = displayStyle;
             _toolbar.style.display = displayStyle;
+
+            if (_isVisible == value) return;
+            _isVisible = value;
 
             if (_isVisible)
             {
                 _savedBehaviours = IntegrationUtilities.GetCurrentBehaviourStates();
                 IntegrationUtilities.SetBehaviourStates(PlayerBehaviourFlags.Input | PlayerBehaviourFlags.EscapeControl);
+                //IntegrationUtilities.DisableMovement();
 
                 var imposter = IntegrationUtilities.CreateMenuImposter<ClosableMenuImposter>(this);
 
-                if (imposter is not null) imposter.OnClose += (_, _)  => IsVisible = false;
+                if (imposter is not null) imposter.OnClose += (_, _) => IsVisible = false; 
             }
             else
             {
+                //IntegrationUtilities.EnableMovement();
+
                 IntegrationUtilities.SetBehaviourStates(_savedBehaviours);
+                MelonLogger.Msg(_savedBehaviours);
+                //IntegrationUtilities.SetBehaviourStatesAll(PlayerBehaviourFlags.All, false);
                 IntegrationUtilities.DestroyAllMenuImposters(this);
             }
         }
